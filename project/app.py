@@ -1,20 +1,13 @@
 from flask import Flask, request, jsonify, render_template
 import os
 import re
-from pathlib import Path
 from google import genai
-from dotenv import load_dotenv
-
-BASE_DIR = Path(__file__).resolve().parent
-DOTENV_PATH = BASE_DIR / '.env'
-load_dotenv(DOTENV_PATH, override=True)
-load_dotenv(override=True)
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 app.config['JSON_AS_ASCII'] = False
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 if not GEMINI_API_KEY:
-    app.logger.warning("GEMINI_API_KEY не найден. Проверял файл %s", DOTENV_PATH)
+    app.logger.warning("GEMINI_API_KEY не найден! Убедись, что в Railway Project → Variables есть GEMINI_API_KEY")
 GEMINI_MODEL = os.getenv('GEMINI_MODEL', 'gemini-2.5-flash')
 _client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
 MODEL_NAME = GEMINI_MODEL
